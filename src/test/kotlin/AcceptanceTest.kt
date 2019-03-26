@@ -35,7 +35,11 @@ class AcceptanceTest{
 
             "10,1,1" to "14",
             "10,1" to "",
-            "10" to ""
+            "10" to "",
+
+            "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1" to "20",
+            "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,1" to "29",
+            "10,10,10,10,10,10,10,10,10,10,10,10" to "300"
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this comma separated input list $input, i expect $expected"){
             eachTest {
