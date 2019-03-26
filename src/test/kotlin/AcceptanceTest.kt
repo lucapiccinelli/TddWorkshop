@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.io.PrintStream
@@ -9,24 +6,38 @@ import java.io.PrintStream
 class AcceptanceTest{
     private lateinit var _myOut: OutputStream
 
-    @BeforeEach
     fun setup(){
         _myOut = ByteArrayOutputStream()
         System.setOut(PrintStream(_myOut))
     }
 
-    @AfterEach
     fun teardown(){
         _myOut.close()
     }
 
-    @Test
-    fun `as a bowling player, i want to know my total score`(){
-        play(arrayOf("1,1"))
-        Assertions.assertEquals("2${System.lineSeparator()}", _myOut.toString())
+    inline fun eachTest(codeBlock: () -> Unit){
+        try {
+            setup()
+            codeBlock()
+        }finally {
+            teardown()
+        }
+    }
+
+    @TestFactory
+    fun `as a bowling player, i want to know my total score`() = listOf(
+            "1,1" to "2",
+            "5,5,1,1" to "13"
+    ).map{ (input, expected) ->
+        DynamicTest.dynamicTest("given this comma separated input list $input, i expect $expected"){
+            eachTest {
+                play(arrayOf(input))
+                Assertions.assertEquals("$expected${System.lineSeparator()}", _myOut.toString())
+            }
+        }
     }
 
     private fun play(args: Array<String>) {
-        println("2")
+        println(2)
     }
 }
