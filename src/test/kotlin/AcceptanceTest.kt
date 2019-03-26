@@ -57,7 +57,13 @@ class AcceptanceTest{
             i++
 
             if(currentFrameSum == 10){
-                currentFrameSum += rolls[i] + rolls[i + 1]
+                if(rolls.size > i + 1){
+                    currentFrameSum += rolls[i] + rolls[i + 1]
+                }
+                else{
+                    totalScore = -1
+                    break
+                }
             }
             else{
                 if (rolls.size > i){
