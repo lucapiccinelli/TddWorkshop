@@ -46,15 +46,31 @@ class AcceptanceTest{
                 .split(",")
                 .map(String::toInt)
 
-        if(rolls.size == 1){
-            println()
-            return
+        var i = 0
+        var totalScore = 0
+        while (i < rolls.size){
+            var currentFrameSum = rolls[i]
+            i++
+            if (rolls.size > i){
+                currentFrameSum += rolls[i]
+                i++
+            }
+            else{
+                totalScore = -1
+                break
+            }
+            if(currentFrameSum == 10){
+                if (rolls.size > i){
+                    currentFrameSum += rolls[i]
+                }
+                else{
+                    totalScore = -1
+                    break
+                }
+            }
+
+            totalScore += currentFrameSum
         }
-
-        var totalScore = rolls.sum()
-        if(totalScore == 12) totalScore++
-
-
-        println(totalScore)
+        println(if(totalScore > 0) totalScore else "")
     }
 }
