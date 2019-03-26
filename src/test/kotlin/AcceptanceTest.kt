@@ -28,7 +28,10 @@ class AcceptanceTest{
     fun `as a bowling player, i want to know my total score`() = listOf(
             "1,1" to "2",
             "1" to "",
-            "5,5,1,1" to "13"
+
+            "5,5,1,1" to "13",
+            "5,5,1" to "",
+            "5,5" to ""
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this comma separated input list $input, i expect $expected"){
             eachTest {
@@ -50,6 +53,7 @@ class AcceptanceTest{
 
         var totalScore = rolls.sum()
         if(totalScore == 12) totalScore++
+
 
         println(totalScore)
     }
