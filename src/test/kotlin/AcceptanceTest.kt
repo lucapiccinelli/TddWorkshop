@@ -56,7 +56,8 @@ class AcceptanceTest{
 
         var i = 0
         var totalScore = 0
-        while (i < rolls.size){
+        var currentFrameIndex = 0
+        while (i < rolls.size && currentFrameIndex++ < 10){
             var currentFrameSum = rolls[i]
             i++
 
