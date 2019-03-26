@@ -31,7 +31,9 @@ class AcceptanceTest{
 
             "5,5,1,1" to "13",
             "5,5,1" to "",
-            "5,5" to ""
+            "5,5" to "",
+
+            "10,1,1" to "14"
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this comma separated input list $input, i expect $expected"){
             eachTest {
