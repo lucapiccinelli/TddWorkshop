@@ -27,6 +27,7 @@ class AcceptanceTest{
     @TestFactory
     fun `as a bowling player, i want to know my total score`() = listOf(
             "1,1" to "2",
+            "1" to "",
             "5,5,1,1" to "13"
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this comma separated input list $input, i expect $expected"){
@@ -41,6 +42,8 @@ class AcceptanceTest{
         val rolls = args[0]
                 .split(",")
                 .map(String::toInt)
+
+        
 
         var totalScore = rolls.sum()
         if(totalScore == 12) totalScore++
