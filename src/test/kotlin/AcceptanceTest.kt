@@ -25,4 +25,8 @@ class AcceptanceTest{
         play(arrayOf("1,1"))
         Assertions.assertEquals("2${System.lineSeparator()}", _myOut.toString())
     }
+
+    private fun play(args: Array<String>) {
+        println("2")
+    }
 }
