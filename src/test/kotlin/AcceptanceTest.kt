@@ -43,7 +43,10 @@ class AcceptanceTest{
                 .split(",")
                 .map(String::toInt)
 
-        
+        if(rolls.size == 1){
+            println()
+            return
+        }
 
         var totalScore = rolls.sum()
         if(totalScore == 12) totalScore++
