@@ -53,21 +53,27 @@ class AcceptanceTest{
         while (i < rolls.size){
             var currentFrameSum = rolls[i]
             i++
-            if (rolls.size > i){
-                currentFrameSum += rolls[i]
-                i++
+
+            if(currentFrameSum == 10){
+                currentFrameSum += rolls[i] + rolls[i + 1]
             }
             else{
-                totalScore = -1
-                break
-            }
-            if(currentFrameSum == 10){
                 if (rolls.size > i){
                     currentFrameSum += rolls[i]
+                    i++
                 }
                 else{
                     totalScore = -1
                     break
+                }
+                if(currentFrameSum == 10){
+                    if (rolls.size > i){
+                        currentFrameSum += rolls[i]
+                    }
+                    else{
+                        totalScore = -1
+                        break
+                    }
                 }
             }
 
