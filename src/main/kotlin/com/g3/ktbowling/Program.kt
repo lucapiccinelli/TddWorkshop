@@ -4,27 +4,30 @@ import java.util.*
 
 fun main(args: Array<String>) {
     val rollsList = readInput(args)
-    val rolls: Queue<Int> = ArrayDeque(rollsList)
+    var (hasATotal, totalScore) = playTheGame(rollsList)
+    printOutput(totalScore, hasATotal)
+}
 
+private fun playTheGame(rollsList: List<Roll>): Pair<Boolean, Int> {
+    val rolls: Queue<Roll> = ArrayDeque(rollsList)
+    var hasATotal = true
     var totalScore = 0
     var currentFrameIndex = 0
-    var hasATotal = true
 
-    while (rolls.isNotEmpty() && currentFrameIndex++ < 10){
-        val (canContinue, nextRollValue) = takeNextRoll(rolls)
-        var currentFrameSum = nextRollValue
+    while (rolls.isNotEmpty() && currentFrameIndex++ < 10) {
+        val (_, nextRollValue) = takeNextRoll(rolls)
+        var currentFrameSum = nextRollValue.rollValue
 
-        if(currentFrameSum == 10){
+        if (currentFrameSum == 10) {
             val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 2)
             currentFrameSum = newFrameSum
             hasATotal = canContinue
-        }
-        else{
+        } else {
             val (canContinue, nextRollValue) = takeNextRoll(rolls)
-            currentFrameSum += nextRollValue
+            currentFrameSum += nextRollValue.rollValue
             hasATotal = canContinue
 
-            if(currentFrameSum == 10){
+            if (currentFrameSum == 10) {
                 val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 1)
                 currentFrameSum = newFrameSum
                 hasATotal = canContinue
@@ -33,18 +36,17 @@ fun main(args: Array<String>) {
 
         totalScore += currentFrameSum
     }
-
-    printOutput(totalScore, hasATotal)
+    return Pair(hasATotal, totalScore)
 }
 
-private fun takeNextRoll(rolls: Queue<Int>) : Pair<Boolean, Int>{
+private fun takeNextRoll(rolls: Queue<Roll>) : Pair<Boolean, Roll>{
     if (notCanTake(rolls, 1)) {
-        return Pair(false, -1)
+        return Pair(false, Roll(0))
     }
     return Pair(true, rolls.remove())
 }
 
-private fun assignBonus(rolls: Queue<Int>, frameValue: Int, bonusRolls: Int) : Pair<Boolean, Int>{
+private fun assignBonus(rolls: Queue<Roll>, frameValue: Int, bonusRolls: Int) : Pair<Boolean, Int>{
     if (notCanTake(rolls, bonusRolls)) {
         return Pair(false, -1)
     }
@@ -52,9 +54,9 @@ private fun assignBonus(rolls: Queue<Int>, frameValue: Int, bonusRolls: Int) : P
     return Pair(true, frameValue + computeBonus(rolls, bonusRolls))
 }
 
-private fun notCanTake(rolls: Queue<Int>, howMany: Int) = rolls.size < howMany
+private fun notCanTake(rolls: Queue<Roll>, howMany: Int) = rolls.size < howMany
 
-private fun computeBonus(rolls: Queue<Int>, howMany: Int) = rolls.take(howMany).sum()
+private fun computeBonus(rolls: Queue<Roll>, howMany: Int) = rolls.take(howMany).sumBy { it.rollValue }
 
 private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
 
@@ -62,9 +64,13 @@ private fun printOutput(totalScore: Int, hasATotal: Boolean) {
     println(if (hasATotal) totalScore else "")
 }
 
-private fun readInput(args: Array<String>): List<Int> {
+private fun readInput(args: Array<String>): List<Roll> {
     val rolls = args[0]
             .split(",")
             .map(String::toInt)
+            .map{Roll(it)}
+
     return rolls
 }
+
+data class Roll(val rollValue: Int)
