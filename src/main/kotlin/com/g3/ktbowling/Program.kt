@@ -11,7 +11,8 @@ fun main(args: Array<String>) {
     var hasATotal = true
 
     while (rolls.isNotEmpty() && currentFrameIndex++ < 10){
-        var currentFrameSum = rolls.remove()
+        val (canContinue, nextRollValue) = takeNextRoll(rolls)
+        var currentFrameSum = nextRollValue
 
         if(currentFrameSum == 10){
             val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 2)
@@ -19,11 +20,9 @@ fun main(args: Array<String>) {
             hasATotal = canContinue
         }
         else{
-            if (canTake(rolls, 1)){
-                hasATotal = false
-                break
-            }
-            currentFrameSum += rolls.remove()
+            val (canContinue, nextRollValue) = takeNextRoll(rolls)
+            currentFrameSum += nextRollValue
+            hasATotal = canContinue
 
             if(currentFrameSum == 10){
                 val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 1)
@@ -38,15 +37,22 @@ fun main(args: Array<String>) {
     printOutput(totalScore, hasATotal)
 }
 
+private fun takeNextRoll(rolls: Queue<Int>) : Pair<Boolean, Int>{
+    if (notCanTake(rolls, 1)) {
+        return Pair(false, -1)
+    }
+    return Pair(true, rolls.remove())
+}
+
 private fun assignBonus(rolls: Queue<Int>, frameValue: Int, bonusRolls: Int) : Pair<Boolean, Int>{
-    if (canTake(rolls, bonusRolls)) {
+    if (notCanTake(rolls, bonusRolls)) {
         return Pair(false, -1)
     }
 
     return Pair(true, frameValue + computeBonus(rolls, bonusRolls))
 }
 
-private fun canTake(rolls: Queue<Int>, howMany: Int) = rolls.size < howMany
+private fun notCanTake(rolls: Queue<Int>, howMany: Int) = rolls.size < howMany
 
 private fun computeBonus(rolls: Queue<Int>, howMany: Int) = rolls.take(howMany).sum()
 
