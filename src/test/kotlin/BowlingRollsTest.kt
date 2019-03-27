@@ -15,10 +15,9 @@ class BowlingRollsTest{
         DynamicTest.dynamicTest("with this ${inputRolls} it is ${expected} that i can take a roll"){
 
             val rolls = BowlingRolls(inputRolls)
-            val (canContinue, roll) = rolls.takeNextRoll()
+            val roll = rolls.takeNextRoll()
 
-            Assertions.assertEquals(expected, canContinue)
-
+            Assertions.assertEquals(expected, roll.isNotEmpty())
         }
     }
 
@@ -33,8 +32,8 @@ class BowlingRollsTest{
     @Test
     fun `assigning a bonus cumulates on the current roll value`(){
         val rolls = BowlingRolls(listOf(Roll(1)))
-        val (canContinue, sumValue) = rolls.assignBonus(1, 1)
-        Assertions.assertEquals(2, sumValue)
+        val sumValue = rolls.assignBonus(1, 1)
+        Assertions.assertEquals(true, sumValue.equals(2))
     }
 
     @TestFactory
@@ -46,8 +45,8 @@ class BowlingRollsTest{
         DynamicTest.dynamicTest("with this ${inputRolls} it is ${expected} that i can assign a bonus"){
 
             val rolls = BowlingRolls(inputRolls)
-            val (canContinue, _) = rolls.assignBonus(0, 2)
-            Assertions.assertEquals(expected, canContinue)
+            val score = rolls.assignBonus(0, 2)
+            Assertions.assertEquals(expected, score.canContinue)
         }
     }
 

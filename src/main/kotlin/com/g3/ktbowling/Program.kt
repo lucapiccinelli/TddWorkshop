@@ -4,64 +4,38 @@ import java.util.*
 
 fun main(args: Array<String>) {
     val rollsList = readInput(args)
-    var (hasATotal, totalScore) = playTheGame(rollsList)
-    printOutput(totalScore, hasATotal)
+    var totalScore = playTheGame(rollsList)
+    printOutput(totalScore)
 }
 
-private fun playTheGame(rollsList: List<Roll>): Pair<Boolean, Int> {
+private fun playTheGame(rollsList: List<Roll>): FrameScore {
     val rolls = BowlingRolls(rollsList)
-    var hasATotal = true
-    var totalScore = 0
+    var totalScore: FrameScore = FrameScoreWithValue()
     var currentFrameIndex = 0
 
-    while (rolls.hasRolls() && currentFrameIndex++ < 10) {
-        val (_, nextRollValue) = rolls.takeNextRoll()
-        var currentFrameSum = nextRollValue.rollValue
+    while (rolls.hasRolls() && totalScore.canContinue && currentFrameIndex++ < 10) {
+        val firstRoll: Roll = rolls.takeNextRoll()
+        var frameScore: FrameScore = FrameScoreWithValue(firstRoll.rollValue)
 
-        if (currentFrameSum == 10) {
-            val (canContinue, newFrameSum) = rolls.assignBonus(currentFrameSum, 2)
-            currentFrameSum = newFrameSum
-            hasATotal = canContinue
+        if (firstRoll.isAStrike) {
+            frameScore = rolls.assignBonus(10, 2)
         } else {
-            val (canContinue, nextRollValue) = rolls.takeNextRoll()
-            currentFrameSum += nextRollValue.rollValue
-            hasATotal = canContinue
+            frameScore += rolls.takeNextRoll()
 
-            if (currentFrameSum == 10) {
-                val (canContinue, newFrameSum) = rolls.assignBonus(currentFrameSum, 1)
-                currentFrameSum = newFrameSum
-                hasATotal = canContinue
+            if (frameScore.IsASpare) {
+                frameScore = rolls.assignBonus(10, 1)
             }
         }
 
-        totalScore += currentFrameSum
+        totalScore += frameScore
     }
-    return Pair(hasATotal, totalScore)
+    return totalScore
 }
-
-private fun takeNextRoll(rolls: Queue<Roll>) : Pair<Boolean, Roll>{
-    if (notCanTake(rolls, 1)) {
-        return Pair(false, Roll(0))
-    }
-    return Pair(true, rolls.remove())
-}
-
-private fun assignBonus(rolls: Queue<Roll>, frameValue: Int, bonusRolls: Int) : Pair<Boolean, Int>{
-    if (notCanTake(rolls, bonusRolls)) {
-        return Pair(false, -1)
-    }
-
-    return Pair(true, frameValue + computeBonus(rolls, bonusRolls))
-}
-
-private fun notCanTake(rolls: Queue<Roll>, howMany: Int) = rolls.size < howMany
-
-private fun computeBonus(rolls: Queue<Roll>, howMany: Int) = rolls.take(howMany).sumBy { it.rollValue }
 
 private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
 
-private fun printOutput(totalScore: Int, hasATotal: Boolean) {
-    println(if (hasATotal) totalScore else "")
+private fun printOutput(totalScore: FrameScore) {
+    println(totalScore)
 }
 
 private fun readInput(args: Array<String>): List<Roll> {
