@@ -9,26 +9,26 @@ fun main(args: Array<String>) {
 }
 
 private fun playTheGame(rollsList: List<Roll>): Pair<Boolean, Int> {
-    val rolls: Queue<Roll> = ArrayDeque(rollsList)
+    val rolls = BowlingRolls(rollsList)
     var hasATotal = true
     var totalScore = 0
     var currentFrameIndex = 0
 
-    while (rolls.isNotEmpty() && currentFrameIndex++ < 10) {
-        val (_, nextRollValue) = takeNextRoll(rolls)
+    while (rolls.hasRolls() && currentFrameIndex++ < 10) {
+        val (_, nextRollValue) = rolls.takeNextRoll()
         var currentFrameSum = nextRollValue.rollValue
 
         if (currentFrameSum == 10) {
-            val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 2)
+            val (canContinue, newFrameSum) = rolls.assignBonus(currentFrameSum, 2)
             currentFrameSum = newFrameSum
             hasATotal = canContinue
         } else {
-            val (canContinue, nextRollValue) = takeNextRoll(rolls)
+            val (canContinue, nextRollValue) = rolls.takeNextRoll()
             currentFrameSum += nextRollValue.rollValue
             hasATotal = canContinue
 
             if (currentFrameSum == 10) {
-                val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 1)
+                val (canContinue, newFrameSum) = rolls.assignBonus(currentFrameSum, 1)
                 currentFrameSum = newFrameSum
                 hasATotal = canContinue
             }
