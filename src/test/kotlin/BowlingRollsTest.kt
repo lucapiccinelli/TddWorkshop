@@ -50,4 +50,23 @@ class BowlingRollsTest{
         }
     }
 
+    @TestFactory
+    fun `to say that i have a frame, i need a valid frame, but no more than 10 frames`()= listOf(
+            Triple(listOf(Roll(1), Roll(1)), 0,true),
+            Triple(listOf(Roll(10)), 0,true),
+            Triple(listOf(Roll(1)), 0,true),
+            Triple(emptyList<Roll>(), 0, false),
+
+            Triple((0..11).map{Roll(10)}, 10,false),
+            Triple((0..19).map{Roll(1)}, 10,false),
+            Triple((0..19).map{Roll(1)}, 9,true)
+    ).map{(inputRolls, times, expected) ->
+        DynamicTest.dynamicTest("with this ${inputRolls} and taking out $times, it is $expected that i have more rolls"){
+
+            val rolls = BowlingRolls(inputRolls)
+            (0..times-1).forEach { rolls.takeNextFrame() }
+            Assertions.assertEquals(expected, rolls.hasFrames())
+        }
+    }
+
 }
