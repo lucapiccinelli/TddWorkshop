@@ -73,4 +73,3 @@ private fun readInput(args: Array<String>): List<Roll> {
     return rolls
 }
 
-data class Roll(val rollValue: Int)
