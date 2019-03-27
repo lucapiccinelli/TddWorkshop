@@ -1,20 +1,19 @@
 package com.g3.ktbowling
 
-fun main(args: Array<String>) {
-    val rolls = args[0]
-            .split(",")
-            .map(String::toInt)
+import java.util.*
 
-    var i = 0
+fun main(args: Array<String>) {
+    val rollsList = readInput(args)
+    val rolls: Queue<Int> = ArrayDeque(rollsList)
+
     var totalScore = 0
     var currentFrameIndex = 0
-    while (i < rolls.size && currentFrameIndex++ < 10){
-        var currentFrameSum = rolls[i]
-        i++
+    while (rolls.isNotEmpty() && currentFrameIndex++ < 10){
+        var currentFrameSum = rolls.remove()
 
         if(currentFrameSum == 10){
-            if(rolls.size > i + 1){
-                currentFrameSum += rolls[i] + rolls[i + 1]
+            if(rolls.size > 1){
+                currentFrameSum += rolls[0] + rolls[1]
             }
             else{
                 totalScore = -1
@@ -22,17 +21,16 @@ fun main(args: Array<String>) {
             }
         }
         else{
-            if (rolls.size > i){
-                currentFrameSum += rolls[i]
-                i++
+            if (rolls.size > 0){
+                currentFrameSum += rolls.remove()
             }
             else{
                 totalScore = -1
                 break
             }
             if(currentFrameSum == 10){
-                if (rolls.size > i){
-                    currentFrameSum += rolls[i]
+                if (rolls.size > 0){
+                    currentFrameSum += rolls[0]
                 }
                 else{
                     totalScore = -1
@@ -43,5 +41,19 @@ fun main(args: Array<String>) {
 
         totalScore += currentFrameSum
     }
-    println(if(totalScore > 0) totalScore else "")
+
+    printOutput(totalScore)
+}
+
+private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
+
+private fun printOutput(totalScore: Int) {
+    println(if (totalScore > 0) totalScore else "")
+}
+
+private fun readInput(args: Array<String>): List<Int> {
+    val rolls = args[0]
+            .split(",")
+            .map(String::toInt)
+    return rolls
 }
