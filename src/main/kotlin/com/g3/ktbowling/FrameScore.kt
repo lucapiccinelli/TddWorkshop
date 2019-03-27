@@ -35,7 +35,7 @@ class FrameScoreWithValue(var value: Int = 0) : FrameScore {
 
 class EmptyFrameScore : FrameScore {
     override fun toString(): String = ""
-    override fun equals(other: Any?): Boolean = this === other
+    override fun equals(other: Any?): Boolean = this === other || other == -1
     override val canContinue: Boolean = false
     override fun plus(score: FrameScore): FrameScore = EmptyFrameScore()
     override fun plus(outValue: Int): FrameScore = EmptyFrameScore()

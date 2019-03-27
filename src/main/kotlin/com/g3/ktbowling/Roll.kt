@@ -1,6 +1,6 @@
 package com.g3.ktbowling
 
-data class Roll(val rollValue: Int) {
+class Roll(val rollValue: Int) {
     operator fun plus(value: Int): FrameScore =
         when(isEmpty()){
             true -> EmptyFrameScore()
@@ -12,4 +12,11 @@ data class Roll(val rollValue: Int) {
 
 
     val isAStrike: Boolean = rollValue == 10
+
+    companion object {
+        fun fromCommaSeparatedString(inputStr: String) : List<Roll> =
+                inputStr.split(",")
+                        .map(String::toInt)
+                        .map { Roll(it) }
+    }
 }

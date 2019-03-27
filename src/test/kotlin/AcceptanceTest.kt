@@ -26,22 +26,7 @@ class AcceptanceTest{
     }
 
     @TestFactory
-    fun `as a bowling player, i want to know my total score`() = listOf(
-            "1,1" to "2",
-            "1" to "",
-
-            "5,5,1,1" to "13",
-            "5,5,1" to "",
-            "5,5" to "",
-
-            "10,1,1" to "14",
-            "10,1" to "",
-            "10" to "",
-
-            "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1" to "20",
-            "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,1" to "29",
-            "10,10,10,10,10,10,10,10,10,10,10,10" to "300",
-
+    fun `given a list of comma separated numbers, i expect this result`() = listOf(
             "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,1" to "",
             "1,4,4,5,6,4,5,5,10,0,1,7,3,6,4,10,2,8,6" to "133"
     ).map{ (input, expected) ->
