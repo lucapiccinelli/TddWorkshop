@@ -13,23 +13,27 @@ private fun playTheGame(rollsList: List<Roll>): FrameScore {
     var totalScore: FrameScore = FrameScoreWithValue()
     var currentFrameIndex = 0
 
-    while (rolls.hasRolls() && totalScore.canContinue && currentFrameIndex++ < 10) {
-        val firstRoll: Roll = rolls.takeNextRoll()
-        var frameScore: FrameScore = FrameScoreWithValue(firstRoll.rollValue)
-
-        if (firstRoll.isAStrike) {
-            frameScore = rolls.assignBonus(10, 2)
-        } else {
-            frameScore += rolls.takeNextRoll()
-
-            if (frameScore.IsASpare) {
-                frameScore = rolls.assignBonus(10, 1)
-            }
-        }
-
-        totalScore += frameScore
+    while (rolls.hasFrames() && totalScore.canContinue && currentFrameIndex++ < 10) {
+        val frame = rolls.takeNextFrame()
+        totalScore += frame.computeFrameScore()
     }
     return totalScore
+}
+
+private fun computeFrameScore(rolls: BowlingRolls): FrameScore {
+    val firstRoll: Roll = rolls.takeNextRoll()
+    var frameScore: FrameScore = FrameScoreWithValue(firstRoll.rollValue)
+
+    if (firstRoll.isAStrike) {
+        frameScore = rolls.assignBonus(10, 2)
+    } else {
+        frameScore += rolls.takeNextRoll()
+
+        if (frameScore.IsASpare) {
+            frameScore = rolls.assignBonus(10, 1)
+        }
+    }
+    return frameScore
 }
 
 private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
