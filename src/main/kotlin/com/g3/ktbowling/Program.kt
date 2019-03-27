@@ -8,45 +8,52 @@ fun main(args: Array<String>) {
 
     var totalScore = 0
     var currentFrameIndex = 0
+    var hasATotal = true
+
     while (rolls.isNotEmpty() && currentFrameIndex++ < 10){
         var currentFrameSum = rolls.remove()
 
         if(currentFrameSum == 10){
-            if(rolls.size < 2){
-                totalScore = -1
-                break
-            }
-
-            currentFrameSum += computeBonus(rolls, 2)
+            val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 2)
+            currentFrameSum = newFrameSum
+            hasATotal = canContinue
         }
         else{
-            if (rolls.size < 1){
-                totalScore = -1
+            if (canTake(rolls, 1)){
+                hasATotal = false
                 break
             }
             currentFrameSum += rolls.remove()
 
             if(currentFrameSum == 10){
-                if (rolls.size < 1){
-                    totalScore = -1
-                    break
-                }
-                currentFrameSum += computeBonus(rolls, 1)
+                val (canContinue, newFrameSum) = assignBonus(rolls, currentFrameSum, 1)
+                currentFrameSum = newFrameSum
+                hasATotal = canContinue
             }
         }
 
         totalScore += currentFrameSum
     }
 
-    printOutput(totalScore)
+    printOutput(totalScore, hasATotal)
 }
+
+private fun assignBonus(rolls: Queue<Int>, frameValue: Int, bonusRolls: Int) : Pair<Boolean, Int>{
+    if (canTake(rolls, bonusRolls)) {
+        return Pair(false, -1)
+    }
+
+    return Pair(true, frameValue + computeBonus(rolls, bonusRolls))
+}
+
+private fun canTake(rolls: Queue<Int>, howMany: Int) = rolls.size < howMany
 
 private fun computeBonus(rolls: Queue<Int>, howMany: Int) = rolls.take(howMany).sum()
 
 private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
 
-private fun printOutput(totalScore: Int) {
-    println(if (totalScore > 0) totalScore else "")
+private fun printOutput(totalScore: Int, hasATotal: Boolean) {
+    println(if (hasATotal) totalScore else "")
 }
 
 private fun readInput(args: Array<String>): List<Int> {
