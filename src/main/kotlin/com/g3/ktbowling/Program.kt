@@ -12,30 +12,26 @@ fun main(args: Array<String>) {
         var currentFrameSum = rolls.remove()
 
         if(currentFrameSum == 10){
-            if(rolls.size > 1){
-                currentFrameSum += computeBonus(rolls, 2)
-            }
-            else{
+            if(rolls.size < 2){
                 totalScore = -1
                 break
             }
+
+            currentFrameSum += computeBonus(rolls, 2)
         }
         else{
-            if (rolls.size > 0){
-                currentFrameSum += rolls.remove()
-            }
-            else{
+            if (rolls.size < 1){
                 totalScore = -1
                 break
             }
+            currentFrameSum += rolls.remove()
+
             if(currentFrameSum == 10){
-                if (rolls.size > 0){
-                    currentFrameSum += computeBonus(rolls, 1)
-                }
-                else{
+                if (rolls.size < 1){
                     totalScore = -1
                     break
                 }
+                currentFrameSum += computeBonus(rolls, 1)
             }
         }
 
