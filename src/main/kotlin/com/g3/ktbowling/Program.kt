@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 
         if(currentFrameSum == 10){
             if(rolls.size > 1){
-                currentFrameSum += rolls[0] + rolls[1]
+                currentFrameSum += computeBonus(rolls, 2)
             }
             else{
                 totalScore = -1
@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
             }
             if(currentFrameSum == 10){
                 if (rolls.size > 0){
-                    currentFrameSum += rolls[0]
+                    currentFrameSum += computeBonus(rolls, 1)
                 }
                 else{
                     totalScore = -1
@@ -44,6 +44,8 @@ fun main(args: Array<String>) {
 
     printOutput(totalScore)
 }
+
+private fun computeBonus(rolls: Queue<Int>, howMany: Int) = rolls.take(howMany).sum()
 
 private operator fun <E> Queue<E>.get(i: Int): E = elementAt(i)
 
