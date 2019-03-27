@@ -7,7 +7,7 @@ class BowlingRolls(rollsList: List<Roll>) {
     private var _frameCount = 0
 
     fun takeNextRoll(): Roll = rollsQueue
-            .canTake(Roll(-1), 1){it.remove()}
+            .canTake(EmptyRoll(), 1){it.remove()}
 
     fun hasRolls(): Boolean = rollsQueue.isNotEmpty()
 

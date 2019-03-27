@@ -1,5 +1,6 @@
 import com.g3.ktbowling.BowlingGame
 import com.g3.ktbowling.Roll
+import com.g3.ktbowling.RollImpl
 import com.g3.ktbowling.main
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
@@ -24,7 +25,7 @@ class BowlingGameTest{
             "10,10,10,10,10,10,10,10,10,10,10,10" to 300
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this input list $input, i expect $expected"){
-            val score = BowlingGame.playTheGame(Roll.fromCommaSeparatedString(input))
+            val score = BowlingGame.playTheGame(RollImpl.fromCommaSeparatedString(input))
             Assertions.assertTrue(score.equals(expected))
         }
     }

@@ -1,22 +1,31 @@
 package com.g3.ktbowling
 
-class Roll(val rollValue: Int) {
-    operator fun plus(value: Int): FrameScore =
-        when(isEmpty()){
-            true -> EmptyFrameScore()
-            else -> FrameScoreWithValue(rollValue + value)
-        }
+interface Roll {
+    val rollValue: Int
+    val isAStrike: Boolean
+    operator fun plus(value: Int): FrameScore
+    fun isNotEmpty(): Boolean
+    fun isEmpty(): Boolean
+}
 
-    fun isNotEmpty(): Boolean = !isEmpty()
-    private fun isEmpty(): Boolean = rollValue < 0
-
-
-    val isAStrike: Boolean = rollValue == 10
+class RollImpl(override val rollValue: Int) : Roll {
+    override operator fun plus(value: Int): FrameScore = FrameScoreWithValue(rollValue + value)
+    override fun isNotEmpty(): Boolean = !isEmpty()
+    override fun isEmpty(): Boolean = rollValue < 0
+    override val isAStrike: Boolean = rollValue == 10
 
     companion object {
         fun fromCommaSeparatedString(inputStr: String) : List<Roll> =
                 inputStr.split(",")
                         .map(String::toInt)
-                        .map { Roll(it) }
+                        .map { RollImpl(it) }
     }
+}
+
+class EmptyRoll : Roll{
+    override val rollValue = -1
+    override val isAStrike = false
+    override fun isNotEmpty() = false
+    override fun isEmpty() = true
+    override fun plus(value: Int): FrameScore = EmptyFrameScore()
 }
