@@ -22,7 +22,9 @@ class BowlingGameTest{
 
             "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1" to 20,
             "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,1" to 29,
-            "10,10,10,10,10,10,10,10,10,10,10,10" to 300
+            "10,10,10,10,10,10,10,10,10,10,10,10" to 300,
+            "9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0" to 90,
+            "5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5" to 150
     ).map{ (input, expected) ->
         DynamicTest.dynamicTest("given this input list $input, i expect $expected"){
             val score = BowlingGame.playTheGame(RollImpl.fromCommaSeparatedString(input))
